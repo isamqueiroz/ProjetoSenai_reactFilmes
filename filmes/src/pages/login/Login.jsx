@@ -22,7 +22,7 @@ const Login = () => {
                     </div>
                 </div>
                  {/* <button type="submit">Entrar</button> */}
-                 <Botao/>
+                 <Botao NomeDoBotao ="Entrar"/>
             </form>
         </section>
    </main> 
