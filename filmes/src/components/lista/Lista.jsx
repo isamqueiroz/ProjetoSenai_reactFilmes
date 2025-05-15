@@ -24,13 +24,36 @@ const Lista = (props) => {
                     </thead>
                     {/* corpo da tabela */}
                     <tbody>
-                      <tr className="item_lista">
-                        <td data-cell="nome">Velozes e furiosos</td>
+                        {props.lista && props.lista.length > 0 ? (
+
+                            props.lista.map((item, index) => (
+
+
+                      <tr className="item_lista" key={item.idGenero}>
+                        <td data-cell="nome">
+                            {item.nome}
+                        </td>
                         <td data-cell="Gênero" style={{display: props.visivel}}>Ação</td>
-                        <td data-cell="Editar"> <img src={Editar} alt="Caneta" /></td>
-                        <td data-cell="Excluir"> <img src={Excluir} alt="Lixeira" /></td>
+                        <td data-cell="Editar">
+                             {/* <button className="icon" onClick={() => props.funcEditar(item)}> */}
+                             <img src={Editar} alt="Caneta" />
+                             {/* </button> */}
+                             </td>
+                        <td data-cell="Excluir"> 
+                            <button className="icone" onClick={() => props.funcExcluir(item)}>
+                            <img src={Excluir} alt="Lixeira" />
+                            </button>
+                        
+                        </td>
                       </tr>
-                     
+                             ))
+
+                            
+                        ) : 
+                        ( 
+                            <p>nenhum gênero foi encontrado.</p>
+                        )
+                          }
                     </tbody>
                 </table>
             </div>
