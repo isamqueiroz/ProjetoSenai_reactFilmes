@@ -16,7 +16,7 @@ const Lista = (props) => {
                         <tr className="tablecabecalho">
                             {/* th => table header */}
                             <th>Nome</th>
-                            <th  style={{display: props.visivel}}>Gênero</th>
+                            <th style={{display: props.visivel}}>Gênero</th>
                             <th>Editar</th>
                             <th>Excluir</th>
                             
@@ -35,9 +35,9 @@ const Lista = (props) => {
                         </td>
                         <td data-cell="Gênero" style={{display: props.visivel}}>Ação</td>
                         <td data-cell="Editar">
-                             {/* <button className="icon" onClick={() => props.funcEditar(item)}> */}
+                             <button className="icon" onClick={() => props.funcEditar(item)}>
                              <img src={Editar} alt="Caneta" />
-                             {/* </button> */}
+                             </button>
                              </td>
                         <td data-cell="Excluir"> 
                             <button className="icone" onClick={() => props.funcExcluir(item)}>

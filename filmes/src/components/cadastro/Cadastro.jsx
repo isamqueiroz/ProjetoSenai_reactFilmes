@@ -15,21 +15,24 @@ const Cadastro = (props) => {
               name="nome"
               placeholder={`Digite o nome do ${props.placeholder}`}
               value={props.valorInput}
-               onChange={(e) => props.setValorInput(e.target.value) }
+              onChange={(e) => props.setValorInput(e.target.value)}
             />
           </div>
           <div
             className="campo_cad_genero"
             style={{ display: props.visibilidade }}
           >
-            <label htmlFor="genero"></label>
             <select name="genero" id="">
+            <label htmlFor="genero"></label>
               <option value="" disabled selected>
                 Selecione
               </option>
-              <option value="">op 1</option>
-              <option value="">op 2</option>
-              <option value="">op 3</option>
+              {props.lista &&
+                props.lista.length > 0 &&
+                props.lista.map((itemGenero) => 
+                <option value={itemGenero.idGenero}>{itemGenero.nome}</option>
+                )}
+              
             </select>
           </div>
           <Botao nomeDoBotao="Cadastrar" />

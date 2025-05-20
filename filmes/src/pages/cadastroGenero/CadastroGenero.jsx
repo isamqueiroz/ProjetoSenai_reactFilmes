@@ -116,40 +116,60 @@ const CadastroGenero = () => {
    
   }
 
-  // async function editarGenero(GeneroId){
-  //    try {
-  //      await api.put(`genero/${GeneroId.idGenero}`);
-
-  //    } catch (error) {
-
-  //    }
-
-  //TESTE: validar o genero
-  // useEffect(() => {
-  //     console.log(genero);
-  // },[genero]);
-  //fim do teste
-
-  //function() = {} ---- função
-  //arrow function ou função anonima.
-  //[] <= array
-
-  //hooks     Função     Dependencia
-  //useEffect( () = > {},       []        )
-
-  // Hooks : Effect (efeito a partir de uma alteração de Estado)
-  //       : efeito colateral
-
-  //função: o efeito que queremos que aconteça
-
-  //Dependencia : Vazio (o efeitp acontece na primeira vez que a tela é "montada"
-  //ou quando for recarregada, com dependencia (toda vez que o state sofrer alteração o efeito
-  // acontecerá ) )
-
+  async function editarGenero(genero){
+  console.log(genero);
+  
+const { value: novoGenero } = await Swal.fire({
+  title: "Modifique o seu gênero",
+  input: "text",
+  inputLabel: "Novo Gênero",
+  inputValue: genero.nome,
+  showCancelButton: true,
+  inputValidator: (value) => {
+    if (!value) {
+      return "O campo precisa estar preenchido!";
+    }
+  }
+});
+if (novoGenero) {
+  try {
+    api.put(`genero/${genero.idGenero}`, {nome: novoGenero});
+    Swal.fire(`Gênero modificado para ${novoGenero}`);
+    listarGenero();
+  } catch (error) {
+    console.log(error);
+    
+  }
+  
+}
+  }
+  
   useEffect(() => {
     listarGenero();
   }, []);
-
+  
+  
+    //TESTE: validar o genero
+    // useEffect(() => {
+    //     console.log(genero);
+    // },[genero]);
+    //fim do teste
+  
+    //function() = {} ---- função
+    //arrow function ou função anonima.
+    //[] <= array
+  
+    //hooks     Função     Dependencia
+    //useEffect( () = > {},       []        )
+  
+    // Hooks : Effect (efeito a partir de uma alteração de Estado)
+    //       : efeito colateral
+  
+    //função: o efeito que queremos que aconteça
+  
+    //Dependencia : Vazio (o efeitp acontece na primeira vez que a tela é "montada"
+    //ou quando for recarregada, com dependencia (toda vez que o state sofrer alteração o efeito
+    // acontecerá ) )
   return (
     <>
       <Header />
@@ -171,6 +191,7 @@ const CadastroGenero = () => {
           visivel="none"
           lista={listaGenero}
           funcExcluir={excluirGenero}
+          funcEditar={editarGenero}
         />
       </main>
       <Footer />
