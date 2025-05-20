@@ -16,7 +16,7 @@ const CadastroGenero = () => {
 
   const [genero, setGenero] = useState("");
 
-  function alerta(icone, mensagem) {
+  function alertar(icone, mensagem) {
     const Toast = Swal.mixin({
       toast: true,
       position: "top-end",
@@ -42,87 +42,87 @@ const CadastroGenero = () => {
       try {
         //cadastrar um genero: post
         await api.post("genero", { nome: genero });
-        alerta("success", "Cadastro realizado com sucesso");
+        alertar("success", "Cadastro realizado com sucesso");
+        setGenero("");
+        listarGenero();
       } catch (error) {
-        alerta("error", "Erro! entre em contato com o nosso suporte");
+        alertar("error", "Erro! entre em contato com o nosso suporte");
         console.log(error);
       }
     } else {
-      alerta("info", "Preencha o campo!!");
+      alertar("info", "Preencha o campo!!");
     }
 
     //try => tentar(o esperado)
     //catch => pega a exceção
   }
 
-async function listarGenero(){
-  try {
-    //await -> Aguarde ter uma resposta da solicitação
-    const resposta =  await api.get("genero");
-  
-console.log();
+  async function listarGenero() {
+    try {
+      //await -> Aguarde ter uma resposta da solicitação
+      const resposta = await api.get("genero");
 
-    setListaGenero(resposta.data)
+      console.log();
 
-  } catch (error) {
-    console.log(error);
-    
+      setListaGenero(resposta.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
-}
 
-  async function excluirGenero(generoId){
-   try {
-     await api.delete(`genero/${generoId.idGenero}`);
+  async function excluirGenero(generoId) {
+     const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger",
+      },
+      buttonsStyling: true,
+    });
+    swalWithBootstrapButtons
+      .fire({
+        title: "Tem certeza?",
+        text: "Você não poderá reverter isso!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sim, exclua-o!",
+        cancelButtonText: "Não, cancele!",
+        reverseButtons: true,
+      })
+      .then(async(result) => {
+        if (result.isConfirmed) {
+           try {              //interpolação
+      await api.delete(`genero/${generoId.idGenero}`);
     
-   } catch (error) {
-    
-   }
+    } catch (error) {
 
-  const swalWithBootstrapButtons = Swal.mixin({
-  customClass: {
-    confirmButton: "btn btn-success",
-    cancelButton: "btn btn-danger"
-  },
-  buttonsStyling: false
-});
-swalWithBootstrapButtons.fire({
-  title: "Tem certeza?",
-  text: "Você não poderá reverter isso!",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonText: "Sim, exclua-o!",
-  cancelButtonText: "Não, cancele!",
-  reverseButtons: true
-}).then((result) => {
-  if (result.isConfirmed) {
-    swalWithBootstrapButtons.fire({
-      title: "Deleted!",
-      text: "Seu arquivo foi excluído.",
-      icon: "success"
-    });
-  } else if (
-    /* Read more about handling dismissals below */
-    result.dismiss === Swal.DismissReason.cancel
-  ) {
-    swalWithBootstrapButtons.fire({
-      title: "Cancelled",
-      text: "Seu arquivo está seguro :)",
-      icon: "error"
-    });
+      console.log(error); 
+    }
+          swalWithBootstrapButtons.fire({
+            title: "Deleted!",
+            text: "Seu arquivo foi excluído.",
+            icon: "success",
+          });
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire({
+            title: "Cancelled",
+            text: "Seu arquivo está seguro :)",
+            icon: "error",
+          });
+        }
+      });
+   
   }
-});
 
-}
+  // async function editarGenero(GeneroId){
+  //    try {
+  //      await api.put(`genero/${GeneroId.idGenero}`);
 
-// async function editarGenero(GeneroId){
-//    try {
-//      await api.put(`genero/${GeneroId.idGenero}`);
-    
-//    } catch (error) {
-    
-//    }
+  //    } catch (error) {
 
-
+  //    }
 
   //TESTE: validar o genero
   // useEffect(() => {
@@ -130,12 +130,25 @@ swalWithBootstrapButtons.fire({
   // },[genero]);
   //fim do teste
 
+  //function() = {} ---- função
+  //arrow function ou função anonima.
+  //[] <= array
+
+  //hooks     Função     Dependencia
+  //useEffect( () = > {},       []        )
+
+  // Hooks : Effect (efeito a partir de uma alteração de Estado)
+  //       : efeito colateral
+
+  //função: o efeito que queremos que aconteça
+
+  //Dependencia : Vazio (o efeitp acontece na primeira vez que a tela é "montada"
+  //ou quando for recarregada, com dependencia (toda vez que o state sofrer alteração o efeito
+  // acontecerá ) )
 
   useEffect(() => {
-  listarGenero();
-  }, [])
-
-  
+    listarGenero();
+  }, []);
 
   return (
     <>
@@ -154,12 +167,11 @@ swalWithBootstrapButtons.fire({
         />
 
         <Lista
-         ListaTitulo="Lista de Gêneros" 
-         visivel="none" 
-         lista = {listaGenero}
-         funcExcluir = {excluirGenero}
-         
-         />
+          ListaTitulo="Lista de Gêneros"
+          visivel="none"
+          lista={listaGenero}
+          funcExcluir={excluirGenero}
+        />
       </main>
       <Footer />
     </>
