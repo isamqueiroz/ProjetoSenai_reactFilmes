@@ -38,13 +38,12 @@ const CadastroGenero = () => {
     evt.preventDefault();
     //verificar se o input esta vindo vazio
     // trim: apaga os espaços
-    if (genero.trim() != "") {
+    if (genero.trim() !== "") {
       try {
         //cadastrar um genero: post
         await api.post("genero", { nome: genero });
         alertar("success", "Cadastro realizado com sucesso");
         setGenero("");
-        listarGenero();
       } catch (error) {
         alertar("error", "Erro! entre em contato com o nosso suporte");
         console.log(error);
@@ -189,9 +188,13 @@ if (novoGenero) {
         <Lista
           ListaTitulo="Lista de Gêneros"
           visivel="none"
+
           lista={listaGenero}
+          tipoLista = "genero"
+
           funcExcluir={excluirGenero}
           funcEditar={editarGenero}
+          
         />
       </main>
       <Footer />

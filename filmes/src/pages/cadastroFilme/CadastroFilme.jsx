@@ -2,22 +2,19 @@ import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import Cadastro from "../../components/cadastro/Cadastro";
 import Lista from "../../components/lista/Lista";
+import api from "../../Services/services";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-import { useEffect, useState } from "react";
-// import Swal from "sweetalert2";
-// import { Fragment } from "react";
-
-import api from "../../Services/services";
-const CadastroFilme = () => {
-
 // const [selecionaGenero, setSelecionaGenero] = useState('');
-const [listaGenero, setListaGenero] = useState([]);
-const [cadastroFilme, setCadastroFilme] = useState([]);
-const [genero, setGenero] = useState("")
-const [filme, setFilme] = useState("")
 
- function alertar(icone, mensagem) {
+const CadastroFilme = () => {
+  const [listaGenero, setListaGenero] = useState([]);
+  const [genero, setGenero] = useState("");
+  const [filme, setFilme] = useState("");
+  const [listaFilme, setListaFilme] = useState([]);
+
+  function alertar(icone, mensagem) {
     const Toast = Swal.mixin({
       toast: true,
       position: "top-end",
@@ -34,65 +31,75 @@ const [filme, setFilme] = useState("")
       title: mensagem,
     });
   }
-
+  //Funcao para trazer os generos no meu select
   async function listarGenero() {
-    
     try {
       const resposta = await api.get("genero");
-      setListaGenero(resposta.data)
-    } catch (error) { 
-      console.log(error);
-      
-    }
-
-  }
-
-  async function CadastrarFilme () {
-   if(filme.trim() != ""){  
-    try {
-      await api.post("filme", {titulo: filme, idGenero: genero});
-      alertar ("success", "Sucesso! Cadastro realizado com sucesso");
-      setFilme()
+      setListaGenero(resposta.data);
     } catch (error) {
       console.log(error);
-      
     }
-
-     
-  }else{
-    alertar("error", "erro! preencha o campo")
   }
 
-  
+  async function cadastrarFilme(e) {
+    e.preventDefault();
+    if (filme.trim() !== "") {
+      try {
+        await api.post("filme", { titulo: filme, idGenero: genero });
+        alertar("success", "Sucesso! Cadastro realizado com sucesso!");
+        setFilme("");
+        setGenero("");
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alertar("error", "Erro! Preencha os campos");
+    }
+  }
+
+  async function listarFilme() {
+    try {
+      const resposta = await api.get("filme");
+      setListaFilme(resposta.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     listarGenero();
+    listarFilme();
   }, []);
-
 
   return (
     <>
       <Header />
       <main>
-        <Cadastro tituloCadastro="Cadastro de Filme"
-         placeholder ="Filme"
-        lista = {listaGenero}
-        funcCadastro = {CadastrarFilme}
-        valorInput = {filme}
-        setValorInput = {setFilme}
+        <Cadastro
+          tituloCadastro="Cadastro de Filme"
+          placeholder="filme"
 
-        valorSelect = {genero}
-        setValorSelect = {setGenero}
+          lista={listaGenero}
 
+          funcCadastro={cadastrarFilme}
+
+          valorInput={filme}
+          setValorInput={setFilme}
+
+          valorSelect={genero}
+          setValorSelect={setGenero}
         />
-        
-        <Lista 
-          ListaTitulo ="Lista De Filme"
+        <Lista
+          ListaTitulo="Lista de Filmes"
+
+          tipoLista="filme"
+
+          lista={listaFilme}
         />
       </main>
       <Footer />
     </>
   );
-};
 };
 
 export default CadastroFilme;
